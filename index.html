@@ -33,10 +33,6 @@
     .orange-glow {
       box-shadow: 0 0 15px rgba(255, 102, 0, 0.3);
     }
-    .orange-border-glow {
-      border-color: #ff6600;
-      box-shadow: 0 0 10px rgba(255, 102, 0, 0.2);
-    }
     .tab-active {
       border-bottom: 3px solid #ff6600;
       color: #ff6600;
@@ -63,7 +59,7 @@
 
       <div class="flex items-center gap-3">
         <span class="text-xs bg-gn-border px-3 py-1.5 rounded-full text-gray-300 flex items-center gap-2">
-          <i class="fa-solid fa-users text-gn-orange"></i> <span id="total-jogadores">6</span> Jogadores
+          <i class="fa-solid fa-users text-gn-orange"></i> <span id="total-jogadores">0</span> Jogadores
         </span>
         <button onclick="carregarDados()" class="text-xs bg-gn-orange/20 hover:bg-gn-orange/30 text-gn-orange border border-gn-orange/40 px-3 py-1.5 rounded-lg transition">
           <i class="fa-solid fa-rotate-right mr-1"></i> Atualizar
@@ -96,7 +92,7 @@
           <h2 class="font-bold text-lg text-white flex items-center gap-2">
             <i class="fa-solid fa-ranking-star text-gn-orange"></i> Ranking da Temporada
           </h2>
-          <span class="text-xs text-gray-400">Sistema: 10, 8, 6, 4, 2, 1 pts</span>
+          <span class="text-xs text-gray-400">Critério de desempate: Mais Vitórias e Pódios</span>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm">
@@ -162,7 +158,7 @@
     </div>
 
     <!-- Conteúdo 4: Histórico de Rodadas -->
-    <div id="view-historico" class="hidden space-y-4" id="container-historico">
+    <div id="view-historico" class="hidden space-y-4">
       <!-- Cards de Rodadas Passadas -->
     </div>
   </main>
@@ -178,14 +174,23 @@
 
     async function carregarDados() {
       try {
-        const resposta = await fetch('dados.json');
+        const resposta = await fetch('dados.json?' + new Date().getTime());
         if (resposta.ok) {
           dadosTorneio = await resposta.json();
         }
       } catch (e) {
-        console.warn("Não foi possível carregar o arquivo dados.json. Usando dados locais de exemplo.");
+        console.warn("Usando dados locais.");
       }
       inicializarInterface();
+    }
+
+    function obterPontosPosicao(pos) {
+      const sistema = dadosTorneio.pontuacao_sistema || [10, 8, 6, 4, 2, 1];
+      // Se a posição existe no array retorna o valor, senão retorna 0 automaticamente
+      if (pos - 1 < sistema.length) {
+        return sistema[pos - 1];
+      }
+      return 0; // Padrão 0 para posições sem pontuação definida
     }
 
     function inicializarInterface() {
@@ -200,7 +205,6 @@
     function calcularPontuacoesGerais() {
       const stats = {};
       
-      // Inicializar estatísticas de cada jogador
       dadosTorneio.jogadores.forEach(j => {
         stats[j.id] = {
           id: j.id,
@@ -214,12 +218,11 @@
         };
       });
 
-      // Processar cada rodada
       dadosTorneio.rodadas.forEach(rodada => {
         rodada.resultados.forEach(res => {
           if (!stats[res.jogador_id]) return;
 
-          const ptsBase = dadosTorneio.pontuacao_sistema[res.posicao - 1] || 0;
+          const ptsBase = obterPontosPosicao(res.posicao);
           stats[res.jogador_id].pontosTotais += ptsBase;
           stats[res.jogador_id].historicoPosicoes.push(res.posicao);
 
@@ -228,7 +231,6 @@
         });
       });
 
-      // Calcular Bônus de Sequência Top 3 (+2 pts para 2 ou mais Top 3 seguidos)
       Object.values(stats).forEach(jStats => {
         let streak = 0;
         jStats.historicoPosicoes.forEach(pos => {
@@ -244,7 +246,16 @@
         });
       });
 
-      return Object.values(stats).sort((a, b) => b.pontosTotais - a.pontosTotais || b.vitorias - a.vitorias);
+      // Ordenação com Critério de Desempate (Pontos > Vitórias > Pódios)
+      return Object.values(stats).sort((a, b) => {
+        if (b.pontosTotais !== a.pontosTotais) {
+          return b.pontosTotais - a.pontosTotais;
+        }
+        if (b.vitorias !== a.vitorias) {
+          return b.vitorias - a.vitorias;
+        }
+        return b.podios - a.podios;
+      });
     }
 
     function renderizarTabelaGeral() {
@@ -252,12 +263,26 @@
       const tbody = document.getElementById('tabela-geral-body');
       tbody.innerHTML = '';
 
+      let posicaoExibida = 1;
+
       ranking.forEach((j, index) => {
-        const pos = index + 1;
-        let posBadge = `<span class="font-bold text-gray-400">#${pos}</span>`;
-        if (pos === 1) posBadge = `<span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 border border-yellow-500/40 rounded font-black">🥇 1º</span>`;
-        if (pos === 2) posBadge = `<span class="px-2 py-1 bg-gray-400/20 text-gray-300 border border-gray-400/40 rounded font-bold">🥈 2º</span>`;
-        if (pos === 3) posBadge = `<span class="px-2 py-1 bg-amber-700/20 text-amber-500 border border-amber-700/40 rounded font-bold">🥉 3º</span>`;
+        // Lógica de Posicionamento Empatado (mesma pontuação, vitórias e pódios ganham a mesma posição)
+        if (index > 0) {
+          const anterior = ranking[index - 1];
+          const mesmoEmpate = (
+            j.pontosTotais === anterior.pontosTotais &&
+            j.vitorias === anterior.vitorias &&
+            j.podios === anterior.podios
+          );
+          if (!mesmoEmpate) {
+            posicaoExibida = index + 1;
+          }
+        }
+
+        let posBadge = `<span class="font-bold text-gray-400">#${posicaoExibida}</span>`;
+        if (posicaoExibida === 1) posBadge = `<span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 border border-yellow-500/40 rounded font-black">🥇 1º</span>`;
+        if (posicaoExibida === 2) posBadge = `<span class="px-2 py-1 bg-gray-400/20 text-gray-300 border border-gray-400/40 rounded font-bold">🥈 2º</span>`;
+        if (posicaoExibida === 3) posBadge = `<span class="px-2 py-1 bg-amber-700/20 text-amber-500 border border-amber-700/40 rounded font-bold">🥉 3º</span>`;
 
         const tr = document.createElement('tr');
         tr.className = "hover:bg-gn-dark/40 transition";
@@ -278,9 +303,9 @@
       if (historico.length < 2) return `<span class="text-gray-500">-</span>`;
       const ult = historico[historico.length - 1];
       const penult = historico[historico.length - 2];
-      if (ult < penult) return `<i class="fa-solid fa-arrow-trend-up text-emerald-400" title="Subiu de posição"></i>`;
-      if (ult > penult) return `<i class="fa-solid fa-arrow-trend-down text-rose-500" title="Caiu de posição"></i>`;
-      return `<i class="fa-solid fa-minus text-gray-500" title="Manteve"></i>`;
+      if (ult < penult) return `<i class="fa-solid fa-arrow-trend-up text-emerald-400"></i>`;
+      if (ult > penult) return `<i class="fa-solid fa-arrow-trend-down text-rose-500"></i>`;
+      return `<i class="fa-solid fa-minus text-gray-500"></i>`;
     }
 
     function preencherSelectJogos() {
@@ -304,7 +329,7 @@
       dadosTorneio.rodadas.filter(r => r.jogo === jogoSelecionado).forEach(rodada => {
         rodada.resultados.forEach(res => {
           if (pontosNoJogo[res.jogador_id]) {
-            pontosNoJogo[res.jogador_id].pts += dadosTorneio.pontuacao_sistema[res.posicao - 1] || 0;
+            pontosNoJogo[res.jogador_id].pts += obterPontosPosicao(res.posicao);
           }
         });
       });
@@ -329,13 +354,23 @@
       const container = document.getElementById('form-simulacao');
       container.innerHTML = '';
 
+      const totalJogadores = dadosTorneio.jogadores.length;
+
       dadosTorneio.jogadores.forEach((j, index) => {
         const div = document.createElement('div');
-        div.className = "flex items-center justify-between bg-gn-dark p-2.5 rounded border border-gn-border";
+        div.className = "flex items-center justify-between bg-gn-dark p-2.5 rounded border border-gn-border gap-2";
+        
+        let optionsHTML = '';
+        for (let i = 1; i <= totalJogadores; i++) {
+          const ptsDoLugar = obterPontosPosicao(i);
+          const selected = (i === index + 1) ? 'selected' : '';
+          optionsHTML += `<option value="${i}" ${selected}>${i}º Lugar (${ptsDoLugar} pts)</option>`;
+        }
+
         div.innerHTML = `
-          <span class="text-sm font-semibold text-white">${j.tag}</span>
-          <select class="sim-pos bg-gn-card text-white border border-gn-border rounded px-2 py-1 text-xs" data-id="${j.id}" onchange="atualizarSimulacao()">
-            ${dadosTorneio.jogadores.map((_, i) => `<option value="${i+1}" ${i === index ? 'selected' : ''}>${i+1}º Lugar (${dadosTorneio.pontuacao_sistema[i]} pts)</option>`).join('')}
+          <span class="text-sm font-semibold text-white truncate max-w-[120px]">${j.tag}</span>
+          <select class="sim-pos bg-gn-card text-white border border-gn-border rounded px-2 py-1 text-xs outline-none focus:border-gn-orange" data-id="${j.id}" onchange="atualizarSimulacao()">
+            ${optionsHTML}
           </select>
         `;
         container.appendChild(div);
@@ -354,7 +389,7 @@
       document.querySelectorAll('.sim-pos').forEach(select => {
         const jId = select.getAttribute('data-id');
         const posSimulada = parseInt(select.value);
-        const ptsSimulados = dadosTorneio.pontuacao_sistema[posSimulada - 1] || 0;
+        const ptsSimulados = obterPontosPosicao(posSimulada);
         if (mapaPontosProjetados[jId]) {
           mapaPontosProjetados[jId].pts += ptsSimulados;
         }
@@ -392,13 +427,13 @@
             <h4 class="font-bold text-white text-base">Rodada #${rodada.id} - <span class="text-gn-orange">${rodada.jogo}</span></h4>
             <span class="text-xs text-gray-400">${rodada.data || ''}</span>
           </div>
-          <div class="grid grid-cols-2 md:grid-cols-6 gap-2 text-xs">
+          <div class="grid grid-cols-2 md:grid-cols-7 gap-2 text-xs">
             ${rodada.resultados.map(r => {
               const jogador = dadosTorneio.jogadores.find(j => j.id === r.jogador_id);
               return `
                 <div class="bg-gn-dark p-2 rounded border border-gn-border/50 text-center">
                   <div class="text-gray-400 font-bold">${r.posicao}º Lugar</div>
-                  <div class="text-white font-semibold">${jogador ? jogador.tag : r.jogador_id}</div>
+                  <div class="text-white font-semibold truncate">${jogador ? jogador.tag : r.jogador_id}</div>
                 </div>
               `;
             }).join('')}
