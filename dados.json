@@ -29,7 +29,7 @@
         { "posicao": 1, "jogador_id": "BB" },
         { "posicao": 2, "jogador_id": "BI" },
         { "posicao": 3, "jogador_id": "DG" },
-        { "posicao": 4, "jogador_id": "AN" },
+        { "posicao": 4, "jogador_id": "AD" },
         { "posicao": 5, "jogador_id": "TZ" },
         { "posicao": 6, "jogador_id": "JV" }
       ]
@@ -57,7 +57,7 @@
         { "posicao": 1, "jogador_id": "TZ" },
         { "posicao": 2, "jogador_id": "JV" },
         { "posicao": 3, "jogador_id": "DG" },
-        { "posicao": 4, "jogador_id": "AN" },
+        { "posicao": 4, "jogador_id": "AD" },
         { "posicao": 5, "jogador_id": "BB" },
         { "posicao": 6, "jogador_id": "BI" }
       ]
