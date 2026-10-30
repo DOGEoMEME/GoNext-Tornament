@@ -33,6 +33,21 @@
         { "posicao": 5, "jogador_id": "JV" },
         { "posicao": 6, "jogador_id": "BI" }
       ]
+    },
+    {
+      "id": 2,
+      "jogo": "Valorant",
+      "data": "2026-13-30",
+      "destaque_id": "AD",
+      "resultados": [
+        { "posicao": 1, "jogador_id": "AD" },
+        { "posicao": 2, "jogador_id": "TZ" },
+        { "posicao": 3, "jogador_id": "DG" },
+        { "posicao": 4, "jogador_id": "BI" },
+        { "posicao": 5, "jogador_id": "JV" },
+        { "posicao": 6, "jogador_id": "BB" }
+      ]
     }
+    
   ]
 }
