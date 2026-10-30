@@ -12,7 +12,8 @@
     { "id": "BB", "tag": "BOB", "nome": "BOB" },
     { "id": "TZ", "tag": "TZ-BOY", "nome": "TZ" },
     { "id": "BI", "tag": "Biel", "nome": "BIEL" },
-    { "id": "JV", "tag": "JVictor", "nome": "JVK" }
+    { "id": "JV", "tag": "JVictor", "nome": "JVK" },
+    { "id": "ZK", "tag": "Isacc", "nome": "IZK" }
   ],
   "jogos_cadastrados": [
     "Rocket League",
@@ -24,14 +25,15 @@
       "id": 1,
       "jogo": "Rocket League",
       "data": "2026-10-30",
-      "destaque_id": "DG",
+      "destaque_id": "BB",
       "resultados": [
         { "posicao": 1, "jogador_id": "BB" },
         { "posicao": 2, "jogador_id": "BI" },
         { "posicao": 3, "jogador_id": "DG" },
         { "posicao": 4, "jogador_id": "AD" },
         { "posicao": 5, "jogador_id": "TZ" },
-        { "posicao": 6, "jogador_id": "JV" }
+        { "posicao": 6, "jogador_id": "JV" },
+        { "posicao": 7, "jogador_id": "ZK" }
       ]
     },
     {
@@ -41,11 +43,12 @@
       "destaque_id": "AD",
       "resultados": [
         { "posicao": 1, "jogador_id": "AD" },
-        { "posicao": 2, "jogador_id": "TZ" },
+        { "posicao": 2, "jogador_id": "BI" },
         { "posicao": 3, "jogador_id": "DG" },
-        { "posicao": 4, "jogador_id": "BI" },
-        { "posicao": 5, "jogador_id": "JV" },
-        { "posicao": 6, "jogador_id": "BB" }
+        { "posicao": 4, "jogador_id": "ZK" },
+        { "posicao": 5, "jogador_id": "TZ" },
+        { "posicao": 6, "jogador_id": "BB" },
+        { "posicao": 7, "jogador_id": "JV" }
       ]
     },
     {
@@ -59,7 +62,8 @@
         { "posicao": 3, "jogador_id": "DG" },
         { "posicao": 4, "jogador_id": "AD" },
         { "posicao": 5, "jogador_id": "BB" },
-        { "posicao": 6, "jogador_id": "BI" }
+        { "posicao": 6, "jogador_id": "BI" },
+        { "posicao": 7, "jogador_id": "ZK" }
       ]
     }
   ]
