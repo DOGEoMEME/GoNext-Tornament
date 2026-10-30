@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoNext Tournament | Tabela Oficial</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gn: {
+              orange: '#ff6600',
+              orangeDark: '#cc5200',
+              glow: '#ff8533',
+              dark: '#0d0f12',
+              card: '#161920',
+              border: '#2a2f3d'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0d0f12;
+      color: #e2e8f0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    .orange-glow {
+      box-shadow: 0 0 15px rgba(255, 102, 0, 0.3);
+    }
+    .orange-border-glow {
+      border-color: #ff6600;
+      box-shadow: 0 0 10px rgba(255, 102, 0, 0.2);
+    }
+    .tab-active {
+      border-bottom: 3px solid #ff6600;
+      color: #ff6600;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-12">
+
+  <!-- Header / Navbar -->
+  <header class="bg-gn-card border-b border-gn-border sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-gn-orange to-gn-orangeDark rounded-lg flex items-center justify-center orange-glow font-black text-black text-xl tracking-tighter">
+          GN
+        </div>
+        <div>
+          <h1 class="text-xl font-bold tracking-wide uppercase text-white flex items-center gap-2">
+            GoNext <span class="text-gn-orange text-sm font-semibold px-2 py-0.5 rounded bg-gn-orange/10 border border-gn-orange/30">Tournament</span>
+          </h1>
+          <p class="text-xs text-gray-400">Classificação Acumulativa e Estatísticas</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="text-xs bg-gn-border px-3 py-1.5 rounded-full text-gray-300 flex items-center gap-2">
+          <i class="fa-solid fa-users text-gn-orange"></i> <span id="total-jogadores">6</span> Jogadores
+        </span>
+        <button onclick="carregarDados()" class="text-xs bg-gn-orange/20 hover:bg-gn-orange/30 text-gn-orange border border-gn-orange/40 px-3 py-1.5 rounded-lg transition">
+          <i class="fa-solid fa-rotate-right mr-1"></i> Atualizar
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 mt-6">
+    <!-- Menu de Navegação pelas Abas -->
+    <div class="flex border-b border-gn-border mb-6 overflow-x-auto text-sm">
+      <button onclick="mudarAba('geral')" id="tab-geral" class="px-5 py-3 tab-active transition flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-trophy"></i> Tabela Geral
+      </button>
+      <button onclick="mudarAba('por-jogo')" id="tab-por-jogo" class="px-5 py-3 text-gray-400 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-gamepad"></i> Top 5 Por Jogo
+      </button>
+      <button onclick="mudarAba('calculadora')" id="tab-calculadora" class="px-5 py-3 text-gray-400 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-calculator"></i> Calculadora de Vitória
+      </button>
+      <button onclick="mudarAba('historico')" id="tab-historico" class="px-5 py-3 text-gray-400 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-clock-rotate-left"></i> Histórico de Rodadas
+      </button>
+    </div>
+
+    <!-- Conteúdo 1: Tabela Geral -->
+    <div id="view-geral" class="space-y-6">
+      <div class="bg-gn-card rounded-xl border border-gn-border overflow-hidden shadow-2xl">
+        <div class="p-4 border-b border-gn-border flex justify-between items-center bg-gn-dark/50">
+          <h2 class="font-bold text-lg text-white flex items-center gap-2">
+            <i class="fa-solid fa-ranking-star text-gn-orange"></i> Ranking da Temporada
+          </h2>
+          <span class="text-xs text-gray-400">Sistema: 10, 8, 6, 4, 2, 1 pts</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-gn-dark/80 text-gray-400 text-xs uppercase tracking-wider border-b border-gn-border">
+              <tr>
+                <th class="py-3.5 px-4 text-center">Pos</th>
+                <th class="py-3.5 px-4">Jogador</th>
+                <th class="py-3.5 px-4 text-center">Pontos Totais</th>
+                <th class="py-3.5 px-4 text-center">Vitórias (1º)</th>
+                <th class="py-3.5 px-4 text-center">Pódios (Top 3)</th>
+                <th class="py-3.5 px-4 text-center">Bônus Sequência (+2)</th>
+                <th class="py-3.5 px-4 text-center">Tendência</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-geral-body" class="divide-y divide-gn-border/50">
+              <!-- Renderizado via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conteúdo 2: Top 5 por Jogo -->
+    <div id="view-por-jogo" class="hidden space-y-6">
+      <div class="flex items-center gap-3 bg-gn-card p-4 rounded-xl border border-gn-border">
+        <label class="text-sm font-semibold text-gray-300">Selecionar Jogo:</label>
+        <select id="select-jogo-filtro" onchange="renderizarTopPorJogo()" class="bg-gn-dark text-white border border-gn-border rounded-lg px-3 py-2 text-sm focus:border-gn-orange outline-none">
+          <!-- Renderizado via JS -->
+        </select>
+      </div>
+
+      <div class="bg-gn-card rounded-xl border border-gn-border p-6 shadow-xl">
+        <h3 id="titulo-jogo-selecionado" class="text-xl font-bold text-gn-orange mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-gamepad"></i> Desempenho no Jogo
+        </h3>
+        <div id="container-top-jogo" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <!-- Cards de Top 5 por Jogo -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Conteúdo 3: Calculadora de Vitória -->
+    <div id="view-calculadora" class="hidden space-y-6">
+      <div class="bg-gn-card rounded-xl border border-gn-border p-6">
+        <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+          <i class="fa-solid fa-calculator text-gn-orange"></i> Simular Resultados da Próxima Rodada
+        </h3>
+        <p class="text-xs text-gray-400 mb-6">Defina as posições projetadas para ver como a tabela vai ficar após a rodada simulada.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div id="form-simulacao" class="space-y-3">
+            <!-- Seleção de posições simuladas via JS -->
+          </div>
+          
+          <div class="bg-gn-dark/60 p-4 rounded-xl border border-gn-border">
+            <h4 class="text-sm font-bold text-gn-orange mb-4 uppercase tracking-wider">Resultado Projetado</h4>
+            <div id="resultado-simulacao" class="space-y-2">
+              <!-- Tabela projetada via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conteúdo 4: Histórico de Rodadas -->
+    <div id="view-historico" class="hidden space-y-4" id="container-historico">
+      <!-- Cards de Rodadas Passadas -->
+    </div>
+  </main>
+
+  <script>
+    let dadosTorneio = {
+      nome_torneio: "GoNext Tournament",
+      pontuacao_sistema: [10, 8, 6, 4, 2, 1],
+      jogadores: [],
+      jogos_cadastrados: [],
+      rodadas: []
+    };
+
+    async function carregarDados() {
+      try {
+        const resposta = await fetch('dados.json');
+        if (resposta.ok) {
+          dadosTorneio = await resposta.json();
+        }
+      } catch (e) {
+        console.warn("Não foi possível carregar o arquivo dados.json. Usando dados locais de exemplo.");
+      }
+      inicializarInterface();
+    }
+
+    function inicializarInterface() {
+      document.getElementById('total-jogadores').innerText = dadosTorneio.jogadores.length;
+      renderizarTabelaGeral();
+      preencherSelectJogos();
+      renderizarTopPorJogo();
+      montarCalculadora();
+      renderizarHistorico();
+    }
+
+    function calcularPontuacoesGerais() {
+      const stats = {};
+      
+      // Inicializar estatísticas de cada jogador
+      dadosTorneio.jogadores.forEach(j => {
+        stats[j.id] = {
+          id: j.id,
+          nome: j.nome || j.tag,
+          tag: j.tag,
+          pontosTotais: 0,
+          vitorias: 0,
+          podios: 0,
+          bonusSequencia: 0,
+          historicoPosicoes: []
+        };
+      });
+
+      // Processar cada rodada
+      dadosTorneio.rodadas.forEach(rodada => {
+        rodada.resultados.forEach(res => {
+          if (!stats[res.jogador_id]) return;
+
+          const ptsBase = dadosTorneio.pontuacao_sistema[res.posicao - 1] || 0;
+          stats[res.jogador_id].pontosTotais += ptsBase;
+          stats[res.jogador_id].historicoPosicoes.push(res.posicao);
+
+          if (res.posicao === 1) stats[res.jogador_id].vitorias++;
+          if (res.posicao <= 3) stats[res.jogador_id].podios++;
+        });
+      });
+
+      // Calcular Bônus de Sequência Top 3 (+2 pts para 2 ou mais Top 3 seguidos)
+      Object.values(stats).forEach(jStats => {
+        let streak = 0;
+        jStats.historicoPosicoes.forEach(pos => {
+          if (pos <= 3) {
+            streak++;
+            if (streak >= 2) {
+              jStats.bonusSequencia += 2;
+              jStats.pontosTotais += 2;
+            }
+          } else {
+            streak = 0;
+          }
+        });
+      });
+
+      return Object.values(stats).sort((a, b) => b.pontosTotais - a.pontosTotais || b.vitorias - a.vitorias);
+    }
+
+    function renderizarTabelaGeral() {
+      const ranking = calcularPontuacoesGerais();
+      const tbody = document.getElementById('tabela-geral-body');
+      tbody.innerHTML = '';
+
+      ranking.forEach((j, index) => {
+        const pos = index + 1;
+        let posBadge = `<span class="font-bold text-gray-400">#${pos}</span>`;
+        if (pos === 1) posBadge = `<span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 border border-yellow-500/40 rounded font-black">🥇 1º</span>`;
+        if (pos === 2) posBadge = `<span class="px-2 py-1 bg-gray-400/20 text-gray-300 border border-gray-400/40 rounded font-bold">🥈 2º</span>`;
+        if (pos === 3) posBadge = `<span class="px-2 py-1 bg-amber-700/20 text-amber-500 border border-amber-700/40 rounded font-bold">🥉 3º</span>`;
+
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-gn-dark/40 transition";
+        tr.innerHTML = `
+          <td class="py-4 px-4 text-center">${posBadge}</td>
+          <td class="py-4 px-4 font-semibold text-white">${j.tag} <span class="text-xs text-gray-500">(${j.nome})</span></td>
+          <td class="py-4 px-4 text-center font-extrabold text-gn-orange text-base">${j.pontosTotais}</td>
+          <td class="py-4 px-4 text-center text-gray-300">${j.vitorias}</td>
+          <td class="py-4 px-4 text-center text-gray-300">${j.podios}</td>
+          <td class="py-4 px-4 text-center font-semibold text-emerald-400">+${j.bonusSequencia}</td>
+          <td class="py-4 px-4 text-center">${obterIconeTendencia(j.historicoPosicoes)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function obterIconeTendencia(historico) {
+      if (historico.length < 2) return `<span class="text-gray-500">-</span>`;
+      const ult = historico[historico.length - 1];
+      const penult = historico[historico.length - 2];
+      if (ult < penult) return `<i class="fa-solid fa-arrow-trend-up text-emerald-400" title="Subiu de posição"></i>`;
+      if (ult > penult) return `<i class="fa-solid fa-arrow-trend-down text-rose-500" title="Caiu de posição"></i>`;
+      return `<i class="fa-solid fa-minus text-gray-500" title="Manteve"></i>`;
+    }
+
+    function preencherSelectJogos() {
+      const select = document.getElementById('select-jogo-filtro');
+      select.innerHTML = '';
+      dadosTorneio.jogos_cadastrados.forEach(jogo => {
+        const option = document.createElement('option');
+        option.value = jogo;
+        option.innerText = jogo;
+        select.appendChild(option);
+      });
+    }
+
+    function renderizarTopPorJogo() {
+      const jogoSelecionado = document.getElementById('select-jogo-filtro').value;
+      document.getElementById('titulo-jogo-selecionado').innerHTML = `<i class="fa-solid fa-gamepad"></i> Ranking: ${jogoSelecionado}`;
+
+      const pontosNoJogo = {};
+      dadosTorneio.jogadores.forEach(j => pontosNoJogo[j.id] = { tag: j.tag, pts: 0 });
+
+      dadosTorneio.rodadas.filter(r => r.jogo === jogoSelecionado).forEach(rodada => {
+        rodada.resultados.forEach(res => {
+          if (pontosNoJogo[res.jogador_id]) {
+            pontosNoJogo[res.jogador_id].pts += dadosTorneio.pontuacao_sistema[res.posicao - 1] || 0;
+          }
+        });
+      });
+
+      const top5 = Object.values(pontosNoJogo).sort((a, b) => b.pts - a.pts).slice(0, 5);
+      const container = document.getElementById('container-top-jogo');
+      container.innerHTML = '';
+
+      top5.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = "bg-gn-dark p-4 rounded-lg border border-gn-border text-center shadow-md";
+        card.innerHTML = `
+          <div class="text-xs text-gray-500 font-bold uppercase mb-1">Top ${idx + 1}</div>
+          <div class="font-bold text-white text-base">${item.tag}</div>
+          <div class="text-gn-orange font-extrabold text-xl mt-2">${item.pts} <span class="text-xs font-normal text-gray-400">pts</span></div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function montarCalculadora() {
+      const container = document.getElementById('form-simulacao');
+      container.innerHTML = '';
+
+      dadosTorneio.jogadores.forEach((j, index) => {
+        const div = document.createElement('div');
+        div.className = "flex items-center justify-between bg-gn-dark p-2.5 rounded border border-gn-border";
+        div.innerHTML = `
+          <span class="text-sm font-semibold text-white">${j.tag}</span>
+          <select class="sim-pos bg-gn-card text-white border border-gn-border rounded px-2 py-1 text-xs" data-id="${j.id}" onchange="atualizarSimulacao()">
+            ${dadosTorneio.jogadores.map((_, i) => `<option value="${i+1}" ${i === index ? 'selected' : ''}>${i+1}º Lugar (${dadosTorneio.pontuacao_sistema[i]} pts)</option>`).join('')}
+          </select>
+        `;
+        container.appendChild(div);
+      });
+      atualizarSimulacao();
+    }
+
+    function atualizarSimulacao() {
+      const rankingAtual = calcularPontuacoesGerais();
+      const mapaPontosProjetados = {};
+
+      rankingAtual.forEach(j => {
+        mapaPontosProjetados[j.id] = { tag: j.tag, pts: j.pontosTotais };
+      });
+
+      document.querySelectorAll('.sim-pos').forEach(select => {
+        const jId = select.getAttribute('data-id');
+        const posSimulada = parseInt(select.value);
+        const ptsSimulados = dadosTorneio.pontuacao_sistema[posSimulada - 1] || 0;
+        if (mapaPontosProjetados[jId]) {
+          mapaPontosProjetados[jId].pts += ptsSimulados;
+        }
+      });
+
+      const resultado = Object.values(mapaPontosProjetados).sort((a, b) => b.pts - a.pts);
+      const container = document.getElementById('resultado-simulacao');
+      container.innerHTML = '';
+
+      resultado.forEach((j, i) => {
+        const item = document.createElement('div');
+        item.className = "flex justify-between items-center text-xs p-2 bg-gn-card rounded border border-gn-border/40";
+        item.innerHTML = `
+          <span class="font-bold text-gray-300">#${i+1} ${j.tag}</span>
+          <span class="font-extrabold text-gn-orange text-sm">${j.pts} pts</span>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function renderizarHistorico() {
+      const container = document.getElementById('view-historico');
+      container.innerHTML = '';
+
+      if (dadosTorneio.rodadas.length === 0) {
+        container.innerHTML = `<div class="text-center text-gray-500 py-8">Nenhuma rodada registrada ainda.</div>`;
+        return;
+      }
+
+      dadosTorneio.rodadas.forEach(rodada => {
+        const card = document.createElement('div');
+        card.className = "bg-gn-card rounded-xl border border-gn-border p-5";
+        card.innerHTML = `
+          <div class="flex justify-between items-center mb-3">
+            <h4 class="font-bold text-white text-base">Rodada #${rodada.id} - <span class="text-gn-orange">${rodada.jogo}</span></h4>
+            <span class="text-xs text-gray-400">${rodada.data || ''}</span>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-6 gap-2 text-xs">
+            ${rodada.resultados.map(r => {
+              const jogador = dadosTorneio.jogadores.find(j => j.id === r.jogador_id);
+              return `
+                <div class="bg-gn-dark p-2 rounded border border-gn-border/50 text-center">
+                  <div class="text-gray-400 font-bold">${r.posicao}º Lugar</div>
+                  <div class="text-white font-semibold">${jogador ? jogador.tag : r.jogador_id}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function mudarAba(aba) {
+      ['geral', 'por-jogo', 'calculadora', 'historico'].forEach(a => {
+        document.getElementById(`view-${a}`).classList.add('hidden');
+        document.getElementById(`tab-${a}`).classList.remove('tab-active');
+        document.getElementById(`tab-${a}`).classList.add('text-gray-400');
+      });
+
+      document.getElementById(`view-${aba}`).classList.remove('hidden');
+      document.getElementById(`tab-${aba}`).classList.add('tab-active');
+      document.getElementById(`tab-${aba}`).classList.remove('text-gray-400');
+    }
+
+    window.onload = carregarDados;
+  </script>
+</body>
+</html>
