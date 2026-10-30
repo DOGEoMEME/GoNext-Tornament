@@ -7,12 +7,12 @@
     "mvp_ou_destaque": 1
   },
   "jogadores": [
-    { "id": "p1", "tag": "Jogador 1", "nome": "DOGE MEME" },
-    { "id": "p2", "tag": "Jogador 2", "nome": "Ander DD" },
-    { "id": "p3", "tag": "Jogador 3", "nome": "BOB" },
-    { "id": "p4", "tag": "Jogador 4", "nome": "TZ-BOY" },
-    { "id": "p5", "tag": "Jogador 5", "nome": "Biel" },
-    { "id": "p6", "tag": "Jogador 6", "nome": "JVictor" }
+    { "id": "p1", "tag": "DOGE MEME", "nome": "DOG" },
+    { "id": "p2", "tag": "Ander DD", "nome": "AND" },
+    { "id": "p3", "tag": "BOB", "nome": "BOB" },
+    { "id": "p4", "tag": "TZ-BOY", "nome": "TZ" },
+    { "id": "p5", "tag": "Biel", "nome": "BIEL" },
+    { "id": "p6", "tag": "JVictor", "nome": "JVK" }
   ],
   "jogos_cadastrados": [
     "Rocket League",
