@@ -37,7 +37,7 @@
     {
       "id": 2,
       "jogo": "Valorant",
-      "data": "2026-10-30",
+      "data": "2026-11-30",
       "destaque_id": "AD",
       "resultados": [
         { "posicao": 1, "jogador_id": "AD" },
@@ -48,6 +48,5 @@
         { "posicao": 6, "jogador_id": "BB" }
       ]
     }
-    
   ]
 }
