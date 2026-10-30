@@ -1,7 +1,7 @@
 {
   "nome_torneio": "GoNext Tournament",
   "tag_time": "GoNext",
-  "pontuacao_sistema": [10, 8, 6, 4, 2, 1],
+  "pontuacao_sistema": [10, 8, 6, 4, 2, 1, 0],
   "bonus_regras": {
     "consistencia_top3": 2,
     "mvp_ou_destaque": 1
