@@ -7,12 +7,12 @@
     "mvp_ou_destaque": 1
   },
   "jogadores": [
-    { "id": "p1", "tag": "DOGE MEME", "nome": "DOG" },
-    { "id": "p2", "tag": "Ander DD", "nome": "AND" },
-    { "id": "p3", "tag": "BOB", "nome": "BOB" },
-    { "id": "p4", "tag": "TZ-BOY", "nome": "TZ" },
-    { "id": "p5", "tag": "Biel", "nome": "BIEL" },
-    { "id": "p6", "tag": "JVictor", "nome": "JVK" }
+    { "id": "DG", "tag": "DOGE MEME", "nome": "DOG" },
+    { "id": "AD", "tag": "Ander DD", "nome": "AND" },
+    { "id": "BB", "tag": "BOB", "nome": "BOB" },
+    { "id": "TZ", "tag": "TZ-BOY", "nome": "TZ" },
+    { "id": "BI", "tag": "Biel", "nome": "BIEL" },
+    { "id": "JV", "tag": "JVictor", "nome": "JVK" }
   ],
   "jogos_cadastrados": [
     "Rocket League",
@@ -26,12 +26,12 @@
       "data": "2026-10-30",
       "destaque_id": "p1",
       "resultados": [
-        { "posicao": 1, "jogador_id": "p1" },
-        { "posicao": 2, "jogador_id": "p2" },
-        { "posicao": 3, "jogador_id": "p3" },
-        { "posicao": 4, "jogador_id": "p4" },
-        { "posicao": 5, "jogador_id": "p5" },
-        { "posicao": 6, "jogador_id": "p6" }
+        { "posicao": 1, "jogador_id": "DG" },
+        { "posicao": 2, "jogador_id": "AD" },
+        { "posicao": 3, "jogador_id": "TZ" },
+        { "posicao": 4, "jogador_id": "BB" },
+        { "posicao": 5, "jogador_id": "JV" },
+        { "posicao": 6, "jogador_id": "BI" }
       ]
     }
   ]
