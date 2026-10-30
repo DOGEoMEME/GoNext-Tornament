@@ -26,12 +26,12 @@
       "data": "2026-10-30",
       "destaque_id": "DG",
       "resultados": [
-        { "posicao": 1, "jogador_id": "DG" },
-        { "posicao": 2, "jogador_id": "AD" },
-        { "posicao": 3, "jogador_id": "TZ" },
-        { "posicao": 4, "jogador_id": "BB" },
-        { "posicao": 5, "jogador_id": "JV" },
-        { "posicao": 6, "jogador_id": "BI" }
+        { "posicao": 1, "jogador_id": "BB" },
+        { "posicao": 2, "jogador_id": "BI" },
+        { "posicao": 3, "jogador_id": "DG" },
+        { "posicao": 4, "jogador_id": "AN" },
+        { "posicao": 5, "jogador_id": "TZ" },
+        { "posicao": 6, "jogador_id": "JV" }
       ]
     },
     {
@@ -46,6 +46,20 @@
         { "posicao": 4, "jogador_id": "BI" },
         { "posicao": 5, "jogador_id": "JV" },
         { "posicao": 6, "jogador_id": "BB" }
+      ]
+    },
+     {
+      "id": 3,
+      "jogo": "Brawhalla",
+      "data": "2026-12-30",
+      "destaque_id": "TZ",
+      "resultados": [
+        { "posicao": 1, "jogador_id": "TZ" },
+        { "posicao": 2, "jogador_id": "JV" },
+        { "posicao": 3, "jogador_id": "DG" },
+        { "posicao": 4, "jogador_id": "AN" },
+        { "posicao": 5, "jogador_id": "BB" },
+        { "posicao": 6, "jogador_id": "BI" }
       ]
     }
   ]
